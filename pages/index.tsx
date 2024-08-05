@@ -17,7 +17,7 @@ export default function Home() {
   const [json, setJson] = useState<string>("");
   const [interfaces, setIntefaces] = useState<string[] | string>([]);
   const [copied, setCopied] = useState(false);
-  const [addExport, setAddExport] = useState(true);
+  const [addExport, setAddExport] = useState('');
   const [rootObjectName, setRootObjectName] = useState("");
 
   const debounceJson = useDebounce(json, 200);
@@ -49,7 +49,7 @@ export default function Home() {
 
     if (typeof interfaces === "string") return `/*\n${interfaces}\n*/`;
     return interfaces
-      .map((int) => (addExport ? "export " : "") + int)
+      .map((int) => (addExport) + int)
       .join("\n\n")
       .trim();
   }, [interfaces, loading, addExport]);
@@ -73,7 +73,7 @@ export default function Home() {
           <textarea
             name="json"
             id="json"
-            placeholder={"JSON"}
+            placeholder={"JSON or JavaScript Object"}
             className="bg-black text-white border border-gray-700 rounded w-full h-96 hide-scrollbar pl-4 py-4 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             onChange={(ev) => setJson(ev.target.value)}
             autoCorrect="off"
@@ -102,17 +102,42 @@ export default function Home() {
               </div>
             </Button>
           </div>
-          <div className="flex">
+          <div className="flex gap-4">
             <label className="space-x-2 flex items-center cursor-pointer">
               <input
-                type="checkbox"
-                checked={addExport}
+                type="radio"
+                checked={addExport === ''}
                 className="cursor-pointer scale-110"
+                value=""
                 onChange={(e) => {
-                  setAddExport(e.currentTarget.checked);
+                  setAddExport(e.currentTarget.value);
+                }}
+              />
+              <p>No Export</p>
+            </label>
+            <label className="space-x-2 flex items-center cursor-pointer">
+              <input
+                type="radio"
+                checked={addExport === 'export '}
+                className="cursor-pointer scale-110"
+                value="export "
+                onChange={(e) => {
+                  setAddExport(e.currentTarget.value);
                 }}
               />
               <p>Export interfaces</p>
+            </label>
+            <label className="space-x-2 flex items-center cursor-pointer">
+              <input
+                type="radio"
+                checked={addExport === 'export default '}
+                className="cursor-pointer scale-110"
+                value="export default "
+                onChange={(e) => {
+                  setAddExport(e.currentTarget.value);
+                }}
+              />
+              <p>Export default</p>
             </label>
           </div>
           <div className="py-2" />
