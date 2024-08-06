@@ -65,6 +65,17 @@ export default function Home() {
     });
   }
 
+  function onInputChange(value: string): void {
+
+    try {
+      const data = eval(`(${value})`)
+      setJson(JSON.stringify(data))
+    } catch (error) {
+      setJson(value)
+    }
+
+  }
+
   return (
     <div className="bg-black">
       <SEOMetaData />
@@ -74,8 +85,8 @@ export default function Home() {
             name="json"
             id="json"
             placeholder={"JSON or JavaScript Object"}
-            className="bg-black text-white border border-gray-700 rounded w-full h-96 hide-scrollbar pl-4 py-4 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            onChange={(ev) => setJson(ev.target.value)}
+            className="whitespace-pre bg-black text-white border border-gray-700 rounded w-full h-96 hide-scrollbar pl-4 py-4 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            onChange={(ev) => onInputChange(ev.target.value)}
             autoCorrect="off"
             value={json}
           />
